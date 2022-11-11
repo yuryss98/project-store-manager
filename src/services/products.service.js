@@ -1,4 +1,7 @@
 const { productsModel } = require('../models');
+require('express-async-errors');
+
+const { validateNewProduct } = require('./validations/validateInputValue');
 
 const getProducts = async () => {
   const products = await productsModel.findAll();
@@ -14,7 +17,18 @@ const getProductById = async (id) => {
   return { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };
 };
 
+const createProduct = async (name) => {
+  const { type, message } = validateNewProduct(name);
+
+  if (type) return { type, message };
+
+  const productId = await productsModel.insert(name);
+
+  return { type: null, message: productId };
+};
+
 module.exports = {
   getProducts,
   getProductById,
+  createProduct,
 };

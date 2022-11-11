@@ -60,13 +60,18 @@
     "colId": "history",
     "containerId": "",
     "name": "http://localhost:3000/products/",
-    "url": "http://localhost:3000/products/00",
-    "method": "GET",
+    "url": "http://localhost:3000/products/",
+    "method": "POST",
     "sortNum": 0,
     "created": "2022-11-11T19:04:58.817Z",
-    "modified": "2022-11-11T20:21:28.432Z",
+    "modified": "2022-11-11T22:50:05.517Z",
     "headers": [],
     "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"name\": \"coca\"\n}",
+      "form": []
+    },
     "tests": []
   },
   {
