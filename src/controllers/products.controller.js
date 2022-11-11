@@ -1,16 +1,16 @@
 const { productsService } = require('../services');
 const httpStatusCode = require('../utils/httpStatusCode');
 
-const getAll = async (_req, res) => {
-  const { message } = await productsService.getAll();
+const getProducts = async (_req, res) => {
+  const { message } = await productsService.getProducts();
 
   res.status(200).json(message);
 };
 
-const getById = async (req, res) => {
+const getProductById = async (req, res) => {
   const { id } = req.params;
 
-  const { type, message } = await productsService.getById(Number(id));
+  const { type, message } = await productsService.getProductById(Number(id));
 
   if (type) return res.status(httpStatusCode.NotFound).json({ message });
 
@@ -18,6 +18,6 @@ const getById = async (req, res) => {
 };
 
 module.exports = {
-  getAll,
-  getById,
+  getProducts,
+  getProductById,
 };
