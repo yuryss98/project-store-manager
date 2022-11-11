@@ -74,4 +74,90 @@ describe('Testando a camada Controller', function () {
       sinon.restore();
     });
   })
+
+  describe('testando a função createProduct', function () {
+    it('usando createProduct sem usar o campo Name retorna um erro', async function () {
+      const res = {};
+
+      const req = {
+        body: {}
+      };
+
+      res.status = sinon.stub().returns(res);
+
+      res.json = sinon.stub().returns();
+
+      sinon.stub(productsService, 'createProduct').resolves({
+        type: 'BAD_REQUEST',
+        message: '"name" is required'
+      });
+
+      await productsController.createProduct(req, res);
+
+      expect(res.status).to.have.been.calledWith(httpStatusCode.BadRequest);
+      expect(res.json).to.have.been.calledWith({ message: '"name" is required' });
+
+      sinon.restore();
+    });
+
+    it('usando createProduct passando o campo name com menos de 5 caracter retorna um erro',
+      async function () {
+      const res = {};
+
+      const req = {
+        body: {
+          name: 'agua'
+        }
+      };
+
+      res.status = sinon.stub().returns(res);
+
+      res.json = sinon.stub().returns();
+
+      sinon.stub(productsService, 'createProduct').resolves({
+        type: 'UNPROCESSABLE_ENTITY',
+        message: '"name" length must be at least 5 characters long'
+      });
+
+      await productsController.createProduct(req, res);
+
+      expect(res.status).to.have.been.calledWith(httpStatusCode.UNPROCESSABLE_ENTITY);
+        expect(res.json).to.have.been.calledWith(
+          { message: '"name" length must be at least 5 characters long' }
+        );
+
+      sinon.restore();
+      });
+    
+    it('usando createProduct passando o campo name com 5 ou mais caracter cria um novo produto',
+      async function () {
+        const newProductID = 55;
+
+        const res = {};
+
+        const req = {
+          body: {
+            name: 'coca-cola'
+          }
+        };
+
+        res.status = sinon.stub().returns(res);
+
+        res.json = sinon.stub().returns();
+
+        sinon.stub(productsService, 'createProduct').resolves({
+          type: null,
+          message: newProductID
+        });
+
+        await productsController.createProduct(req, res);
+
+        expect(res.status).to.have.been.calledWith(httpStatusCode.Created);
+        expect(res.json).to.have.been.calledWith(
+          { id: 55, name: 'coca-cola'  }
+        );
+
+        sinon.restore();
+      });
+  })
 });

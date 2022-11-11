@@ -27,4 +27,16 @@ describe('Testando a camada Model', function() {
       sinon.restore();
     });
   })
+
+  describe('testando as funções insert', function () {
+    it('veja se retorna um id de um novo produto', async function () {
+      sinon.stub(connection, 'execute').resolves([{ insertId: 55 }]);
+
+      const result = await productsModel.insert('coca-cola');
+
+      expect(result).to.deep.equal(55);
+
+      sinon.restore();
+    })
+  })
 });

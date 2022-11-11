@@ -60,16 +60,16 @@
     "colId": "history",
     "containerId": "",
     "name": "http://localhost:3000/products/",
-    "url": "http://localhost:3000/products/",
-    "method": "POST",
+    "url": "http://localhost:3000/products/2",
+    "method": "GET",
     "sortNum": 0,
     "created": "2022-11-11T19:04:58.817Z",
-    "modified": "2022-11-11T22:50:05.517Z",
+    "modified": "2022-11-11T23:51:30.619Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"name\": \"coca\"\n}",
+      "raw": "{\n  \"name\": \"asssdasdasd\"\n}",
       "form": []
     },
     "tests": []
