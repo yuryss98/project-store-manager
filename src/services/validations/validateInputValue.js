@@ -8,6 +8,8 @@ const validateError = (error) => {
 
     return { type: 'UNPROCESSABLE_ENTITY', message: error.message };
   }
+
+  return { type: null, message: '' };
 };
 
 const validateNewProduct = (name) => {

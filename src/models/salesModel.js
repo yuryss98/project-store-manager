@@ -11,9 +11,8 @@ const insertSalesDate = async () => {
 };
 
 const insertSalesProduct = async (saleId, sales) => {
-  const data = connection.execute(
-    `INSERT INTO sales_products (sale_id, product_id, quantity)
-    VALUES (?, ?, ?)`,
+  const data = await connection.execute(
+    'INSERT INTO sales_products (sale_id, product_id, quantity) VALUES (?, ?, ?)',
     [saleId, ...Object.values(sales)],
   );
 
