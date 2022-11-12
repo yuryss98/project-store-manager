@@ -13,6 +13,8 @@ chai.use(sinonChai);
 const { expect } = chai;
 
 describe('testes da camada sales.model', function () {
+  afterEach(sinon.restore)
+
   it('usando a função insertSalesDate, retorne um ID', async function() {
     sinon.stub(connection, 'execute').resolves([{ insertId: 3 }]);
 
@@ -21,11 +23,11 @@ describe('testes da camada sales.model', function () {
     expect(result).to.equal(3);
   });
 
-  // it('usando a função insertSalesProduct, retorne um ID', async function () {
-  //   sinon.stub(connection, 'execute').resolves([{ affectedRows: 1 }]);
+  it('usando a função insertSalesProduct, retorne affectedRows = 1', async function () {
+    sinon.stub(connection, 'execute').resolves([{ affectedRows: 1 }]);
 
-  //   const result = await salesModel.insertSalesProduct(5, { productId: 1, quantity: 15 });
+    const result = await salesModel.insertSalesProduct(2, { productId: 1, quantity: 15 });
 
-  //   expect(result).to.equal(1);
-  // });
+    expect(result).to.equal(1);
+  });
 });

@@ -11,12 +11,12 @@ const insertSalesDate = async () => {
 };
 
 const insertSalesProduct = async (saleId, sales) => {
-  const data = await connection.execute(
+  const [{ affectedRows }] = await connection.execute(
     'INSERT INTO sales_products (sale_id, product_id, quantity) VALUES (?, ?, ?)',
     [saleId, ...Object.values(sales)],
   );
 
-  return data;
+  return affectedRows;
 };
 
 module.exports = {
