@@ -7,38 +7,41 @@ const { productsService } = require('../../../src/services');
 
 describe('Testando a camada Service', function () {
   describe('testando as funções getAll e getById', function () {
+    afterEach(sinon.restore);
+
     it('usando getAll veja se retorna uma lista completa de produtos', async function () {
       sinon.stub(productsModel, 'findAll').resolves(products);
 
       const result = await productsService.getProducts();
 
       expect(result.message).to.deep.equal(products);
-
-      sinon.restore();
     });
 
-    it('usando getById veja se retorna um produto existente', async function () {
-      sinon.stub(productsModel, 'findById').resolves(products[0]);
+    it(`usando getById veja se retorna um produto existente para um id existente
+        e se passando o id de um produto inexistente retorna o erro
+        "Product not found`, async function () {
+      sinon.stub(productsModel, 'findById')
+        .onFirstCall()
+        .resolves(products[0])
+        .onSecondCall()
+        .resolves(undefined)
 
-      const result = await productsService.getProductById(1);
+      const productExists = 1;
+      const productNotExists = 99999;
+
+      let result = await productsService.getProductById(productExists);
 
       expect(result.message).to.deep.equal(products[0]);
 
-      sinon.restore();
-    });
-
-    it('usando getById veja se retorna um produto inexistente', async function () {
-      sinon.stub(productsModel, 'findById').resolves(undefined);
-
-      const result = await productsService.getProductById(999999);
+      result = await productsService.getProductById(productNotExists);
 
       expect(result.message).to.deep.equal('Product not found');
-
-      sinon.restore();
     });
-  })
+  });
 
   describe('testando as funções createdProduct', function () {
+    afterEach(sinon.restore);
+
     it('testando se ela retorna um erro por campos invalidos', async function () {
       sinon.stub(productsModel, 'insert').resolves([{ insertId: 55 }]);
 
@@ -59,8 +62,6 @@ describe('Testando a camada Service', function () {
           message: '"name" length must be at least 5 characters long'
         }
       );
-
-      sinon.restore();
     });
 
     it('testando se retorna um type null e um message com id do novo produto', async function () {
@@ -70,9 +71,6 @@ describe('Testando a camada Service', function () {
 
       expect(result.type).to.equal(null)
       expect(result.message).to.deep.equal(55)
-
-      sinon.restore();
     });
   });
-
 });

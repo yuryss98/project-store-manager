@@ -7,14 +7,14 @@ const connection = require('../../../src/models/connection');
 
 describe('Testando a camada Model', function() {
   describe('testando as funções findAll e findById', function () {
+    afterEach(sinon.restore);
+
     it('veja se retorna uma lista completa de produtos', async function () {
       sinon.stub(connection, 'execute').resolves([products]);
 
       const result = await productsModel.findAll();
 
       expect(result).to.deep.equal(products);
-
-      sinon.restore();
     });
 
     it('usando o /:id veja se retorna um produto existente', async function () {
@@ -23,8 +23,6 @@ describe('Testando a camada Model', function() {
       const result = await productsModel.findById(1);
 
       expect(result).to.deep.equal(products[0]);
-
-      sinon.restore();
     });
   })
 
@@ -37,6 +35,6 @@ describe('Testando a camada Model', function() {
       expect(result).to.deep.equal(55);
 
       sinon.restore();
-    })
-  })
+    });
+  });
 });

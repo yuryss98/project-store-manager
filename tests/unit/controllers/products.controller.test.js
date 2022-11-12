@@ -13,6 +13,8 @@ const { expect } = chai;
 
 describe('Testando a camada Controller', function () {
   describe('testando as funções getAll e getById', function () {
+    afterEach(sinon.restore);
+
     it('usando getAll veja se retorna uma lista completa de produtos', async function () {
       const res = {};
 
@@ -28,8 +30,6 @@ describe('Testando a camada Controller', function () {
 
       expect(res.status).to.have.been.calledWith(httpStatusCode.OK);
       expect(res.json).to.have.been.calledWith(products);
-
-      sinon.restore();
     });
 
     it('usando getById veja se retorna um produto existente', async function () {
@@ -49,8 +49,6 @@ describe('Testando a camada Controller', function () {
 
       expect(res.status).to.have.been.calledWith(httpStatusCode.OK);
       expect(res.json).to.have.been.calledWith(products[0]);
-
-      sinon.restore();
     });
 
     it('usando getById veja se retorna "Product not found"', async function () {
@@ -70,35 +68,11 @@ describe('Testando a camada Controller', function () {
       await productsController.getProductById(req, res);
 
       expect(res.status).to.have.been.calledWith(httpStatusCode.NotFound);
-
-      sinon.restore();
     });
   })
 
   describe('testando a função createProduct', function () {
-    it('usando createProduct sem usar o campo Name retorna um erro', async function () {
-      const res = {};
-
-      const req = {
-        body: {}
-      };
-
-      res.status = sinon.stub().returns(res);
-
-      res.json = sinon.stub().returns();
-
-      sinon.stub(productsService, 'createProduct').resolves({
-        type: 'BAD_REQUEST',
-        message: '"name" is required'
-      });
-
-      await productsController.createProduct(req, res);
-
-      expect(res.status).to.have.been.calledWith(httpStatusCode.BadRequest);
-      expect(res.json).to.have.been.calledWith({ message: '"name" is required' });
-
-      sinon.restore();
-    });
+    afterEach(sinon.restore);
 
     it('usando createProduct passando o campo name com menos de 5 caracter retorna um erro',
       async function () {
@@ -125,8 +99,6 @@ describe('Testando a camada Controller', function () {
         expect(res.json).to.have.been.calledWith(
           { message: '"name" length must be at least 5 characters long' }
         );
-
-      sinon.restore();
       });
     
     it('usando createProduct passando o campo name com 5 ou mais caracter cria um novo produto',
@@ -156,8 +128,6 @@ describe('Testando a camada Controller', function () {
         expect(res.json).to.have.been.calledWith(
           { id: 55, name: 'coca-cola'  }
         );
-
-        sinon.restore();
       });
   })
 });
