@@ -25,7 +25,7 @@ const createProduct = async (req, res) => {
 
   if (type) return res.status(errorMap.mapError(type)).json({ message });
 
-  res.status(httpStatusCode.Created).json({ id: message, name });
+  res.status(httpStatusCode.CREATED).json({ id: message, name });
 };
 
 module.exports = {

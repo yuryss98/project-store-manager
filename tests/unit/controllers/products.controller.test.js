@@ -67,7 +67,7 @@ describe('Testando a camada Controller', function () {
 
       await productsController.getProductById(req, res);
 
-      expect(res.status).to.have.been.calledWith(httpStatusCode.NotFound);
+      expect(res.status).to.have.been.calledWith(httpStatusCode.NOT_FOUND);
     });
   })
 
@@ -124,7 +124,7 @@ describe('Testando a camada Controller', function () {
 
         await productsController.createProduct(req, res);
 
-        expect(res.status).to.have.been.calledWith(httpStatusCode.Created);
+        expect(res.status).to.have.been.calledWith(httpStatusCode.CREATED);
         expect(res.json).to.have.been.calledWith(
           { id: 55, name: 'coca-cola'  }
         );
