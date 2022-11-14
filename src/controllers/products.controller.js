@@ -37,7 +37,7 @@ const updateProduct = async (req, res) => {
 
   if (type) return res.status(errorMap.mapError(type)).json({ message });
 
-  res.status(httpStatusCode.OK).json({ id: message, name });
+  return res.status(httpStatusCode.OK).json({ id, name });
 };
 
 module.exports = {

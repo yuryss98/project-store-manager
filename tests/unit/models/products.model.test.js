@@ -26,15 +26,23 @@ describe('Testando a camada Model', function() {
     });
   })
 
-  describe('testando as funções insert', function () {
-    it('veja se retorna um id de um novo produto', async function () {
+  describe('testando a funções insert, update', function () {
+    afterEach(sinon.restore)
+
+    it('usando a função insert veja se retorna um id de um novo produto', async function () {
       sinon.stub(connection, 'execute').resolves([{ insertId: 55 }]);
 
       const result = await productsModel.insert('coca-cola');
 
       expect(result).to.deep.equal(55);
+    });
 
-      sinon.restore();
+    it('usando a função update veja se retorna apenas 1 linha afetada', async function () {
+      sinon.stub(connection, 'execute').resolves([{ affectedRows: 1 }]);
+
+      const result = await productsModel.update(1, 'Martelo do batman');
+
+      expect(result).to.deep.equal(1);
     });
   });
 });

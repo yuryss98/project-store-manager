@@ -76,26 +76,26 @@ describe('Testando a camada Controller', function () {
 
     it('usando createProduct passando o campo name com menos de 5 caracter retorna um erro',
       async function () {
-      const res = {};
+        const res = {};
 
-      const req = {
-        body: {
-          name: 'agua'
-        }
-      };
+        const req = {
+          body: {
+            name: 'agua'
+          }
+        };
 
-      res.status = sinon.stub().returns(res);
+        res.status = sinon.stub().returns(res);
 
-      res.json = sinon.stub().returns();
+        res.json = sinon.stub().returns();
 
-      sinon.stub(productsService, 'createProduct').resolves({
-        type: 'UNPROCESSABLE_ENTITY',
-        message: '"name" length must be at least 5 characters long'
-      });
+        sinon.stub(productsService, 'createProduct').resolves({
+          type: 'UNPROCESSABLE_ENTITY',
+          message: '"name" length must be at least 5 characters long'
+        });
 
-      await productsController.createProduct(req, res);
+        await productsController.createProduct(req, res);
 
-      expect(res.status).to.have.been.calledWith(httpStatusCode.UNPROCESSABLE_ENTITY);
+        expect(res.status).to.have.been.calledWith(httpStatusCode.UNPROCESSABLE_ENTITY);
         expect(res.json).to.have.been.calledWith(
           { message: '"name" length must be at least 5 characters long' }
         );
@@ -126,8 +126,91 @@ describe('Testando a camada Controller', function () {
 
         expect(res.status).to.have.been.calledWith(httpStatusCode.CREATED);
         expect(res.json).to.have.been.calledWith(
-          { id: 55, name: 'coca-cola'  }
+          { id: 55, name: 'coca-cola' }
         );
       });
-  })
+  });
+
+  describe('testando a função updateProduct', function () {
+    afterEach(sinon.restore)
+
+    it('testando se retorna o erro "Product not found" por passar um id errado', async function () {
+      const productNotExists = 999999;
+      const res = {};
+
+      const req = {
+        params: {
+          id: productNotExists
+        },
+        body: {
+          name: 'martelo do batman'
+        }
+      };
+
+      res.status = sinon.stub().returns(res);
+
+      res.json = sinon.stub().returns();
+
+      sinon.stub(productsService, 'updateProduct')
+        .resolves({ type: 'PRODUCT_NOT_FOUND', message: 'Product not found' });
+
+      await productsController.updateProduct(req, res);
+
+      expect(res.status).to.have.been.calledWith(httpStatusCode.NOT_FOUND);
+      expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
+    });
+
+    it('testando se retorna o erro ""name" is required", por nao passar o campo name',
+      async function () {
+        const existingProduct = 1;
+        const res = {};
+
+        const req = {
+          params: {
+            id: existingProduct
+          },
+          body: {
+            age: 'martelo do batman'
+          }
+        };
+
+        res.status = sinon.stub().returns(res);
+
+        res.json = sinon.stub().returns();
+
+        sinon.stub(productsService, 'updateProduct')
+          .resolves({ type: 'BAD_REQUEST', message: '"name" is required' });
+
+        await productsController.updateProduct(req, res);
+
+        expect(res.status).to.have.been.calledWith(httpStatusCode.BAD_REQUEST);
+        expect(res.json).to.have.been.calledWith({ message: '"name" is required' });
+    });
+    
+    it('testando se de fato atualiza o produto', async function () {
+      const existingProduct = 1;
+      const res = {};
+
+      const req = {
+        params: {
+          id: existingProduct
+        },
+        body: {
+          name: 'martelo do batman'
+        }
+      };
+
+      res.status = sinon.stub().returns(res);
+
+      res.json = sinon.stub().returns();
+
+      sinon.stub(productsService, 'updateProduct')
+        .resolves({ type: null, message: '' });
+
+      await productsController.updateProduct(req, res);
+
+      expect(res.status).to.have.been.calledWith(httpStatusCode.OK);
+      expect(res.json).to.have.been.calledWith({ id: existingProduct, name: 'martelo do batman' });
+    });
+  });
 });

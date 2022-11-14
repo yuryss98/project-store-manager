@@ -36,9 +36,9 @@ const updateProduct = async (id, name) => {
 
   if (type) return { type, message };
 
-  const productId = await productsModel.update(id, name);
+  await productsModel.update(id, name);
 
-  return { type: null, message: productId };
+  return { type: null, message: '' };
 };
 
 module.exports = {
