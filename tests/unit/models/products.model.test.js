@@ -56,7 +56,7 @@ describe('Testando a camada Model', function() {
 
       const result = await productsModel.deleteProduct(existingProduct);
 
-      expect(result).to.deep.equal(undefined);
+      expect(result).to.deep.equal();
     });
   });
 });

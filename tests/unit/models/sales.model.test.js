@@ -46,4 +46,14 @@ describe('testes da camada sales.model', function () {
 
     expect(result).to.deep.equal(sales);
   });
+
+  it('usando a função deleteSale, deleta uma venda', async function () {
+    sinon.stub(connection, 'execute').resolves();
+
+    const existingProduct = 1;
+
+    const result = await salesModel.deleteSale(existingProduct);
+
+    expect(result).to.deep.equal();
+  });
 });

@@ -3,8 +3,8 @@ const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 
 const { salesService } = require('../../../src/services');
-const { newSale, sales } = require('../mocks/newSale.mock');
-const { salesModel } = require('../../../src/models');
+const { newSale, sales, salesWithoutId } = require('../mocks/newSale.mock');
+const { salesModel, productsModel } = require('../../../src/models');
 const valideteProductExists = require('../../../src/services/validations/valideteProductExists');
 
 chai.use(sinonChai);
@@ -37,9 +37,7 @@ describe('testes da camanda sale.service', function () {
     });
 
     it('testando se retorna o erro por produto inexistente', async function () {
-      sinon.stub(valideteProductExists, 'validateProductExists').resolves(
-        { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' }
-      );
+      sinon.stub(productsModel, 'findById').resolves(undefined);
 
       const result = await salesService.createSales([{ productId: 999, quantity: 5 }]);
 
@@ -48,9 +46,7 @@ describe('testes da camanda sale.service', function () {
     });
 
     it('testando se de fato cria uma nova venda', async function () {
-      sinon.stub(valideteProductExists, 'validateProductExists').resolves(
-        { type: null, message: '' }
-      );
+      sinon.stub(productsModel, 'findById').resolves({ id: 1, name: 'Martelo de Thor' });
 
       const newSaleId = 3
 
@@ -104,6 +100,35 @@ describe('testes da camanda sale.service', function () {
       result = await salesService.getSalesById(productNotExists);
 
       expect(result.message).to.deep.equal('Sale not found');
+    });
+  });
+
+  describe('testando a função deleteSale', function () {
+    beforeEach(() => {
+      sinon.stub(salesModel, 'deleteSale').resolves();
+    });
+
+    afterEach(sinon.restore);
+
+    const extingsProduct = 1;
+    const idNotExists = 99999;
+
+    it('testando se retorna o erro "Sale not found" por passar um id errado', async function () {
+      sinon.stub(salesModel, 'findById').resolves([]);
+
+      const result = await salesService.deleteSale(idNotExists);
+
+      expect(result.type).to.deep.equal('SALE_NOT_FOUND');
+      expect(result.message).to.deep.equal('Sale not found');
+    });
+
+    it('testando se de fato deleta o produto', async function () {
+      sinon.stub(salesModel, 'findById').resolves(salesWithoutId);
+
+      const result = await salesService.deleteSale(extingsProduct);
+
+      expect(result.type).to.deep.equal(null);
+      expect(result.message).to.deep.equal('');
     });
   });
 });

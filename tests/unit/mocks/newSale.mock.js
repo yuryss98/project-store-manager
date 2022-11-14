@@ -27,7 +27,21 @@ const sales = [
   }
 ];
 
+const salesWithoutId = [
+  {
+    "date": "2022-11-14T17:37:06.000Z",
+    "productId": 1,
+    "quantity": 5
+  },
+  {
+    "date": "2022-11-14T17:37:06.000Z",
+    "productId": 2,
+    "quantity": 10
+  }
+];
+
 module.exports = {
   newSale,
   sales,
+  salesWithoutId,
 };

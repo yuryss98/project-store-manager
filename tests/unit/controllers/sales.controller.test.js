@@ -163,4 +163,52 @@ describe('testes da camanda sale.controller', function () {
       expect(res.json).to.have.been.calledWith(sales);
     });
   });
+
+  describe('testando a função deleteSale', function () {
+    afterEach(sinon.restore)
+
+    it('testando se retorna o erro "Product not found" por passar um id errado', async function () {
+      const productNotExists = 999999;
+      const res = {};
+      const req = {
+        params: {
+          id: productNotExists
+        },
+      };
+
+      res.status = sinon.stub().returns(res);
+
+      res.json = sinon.stub().returns();
+
+      sinon.stub(salesService, 'deleteSale')
+        .resolves({ type: 'PRODUCT_NOT_FOUND', message: 'Product not found' });
+
+      await salesController.deleteSale(req, res);
+
+      expect(res.status).to.have.been.calledWith(httpStatusCode.NOT_FOUND);
+      expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
+    });
+
+    it('testando se de fato deleta a venda', async function () {
+      const existingProduct = 1;
+      const res = {};
+
+      const req = {
+        params: {
+          id: existingProduct
+        },
+      };
+
+      res.status = sinon.stub().returns(res);
+
+      res.end = sinon.stub().returns();
+
+      sinon.stub(salesService, 'deleteSale')
+        .resolves({ type: null, message: '' });
+
+      await salesController.deleteSale(req, res);
+
+      expect(res.status).to.have.been.calledWith(httpStatusCode.NO_CONTENT);
+    });
+  });
 });

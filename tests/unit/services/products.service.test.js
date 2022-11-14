@@ -6,6 +6,8 @@ const { productsModel } = require('../../../src/models');
 const { productsService } = require('../../../src/services');
 
 describe('Testando a camada Service', function () {
+  const product = { id: 1, name: 'Martelo de Thor' };
+
   describe('testando as funções getAll e getById', function () {
     afterEach(sinon.restore);
 
@@ -86,6 +88,8 @@ describe('Testando a camada Service', function () {
     const name = 'Martelo do batman';
 
     it('testando se retorna o erro "Product not found" por passar um id errado', async function () {
+      sinon.stub(productsModel, 'findById').resolves(undefined)
+
       const result = await productsService.updateProduct(idNotExists, name);
 
       expect(result.type).to.deep.equal('PRODUCT_NOT_FOUND');
@@ -94,6 +98,8 @@ describe('Testando a camada Service', function () {
 
     it('testando se retorna o erro ""name" is required", por nao passar o campo name',
       async function () {
+        sinon.stub(productsModel, 'findById').resolves(product);
+
         const result = await productsService.updateProduct(extingsProduct);
 
         expect(result.type).to.deep.equal('BAD_REQUEST');
@@ -101,6 +107,8 @@ describe('Testando a camada Service', function () {
       });
     
     it('testando se de fato atualiza o produto', async function () {
+      sinon.stub(productsModel, 'findById').resolves(product);
+
       const result = await productsService.updateProduct(extingsProduct, name);
 
       expect(result.type).to.deep.equal(null);
@@ -108,7 +116,7 @@ describe('Testando a camada Service', function () {
     });
   });
 
-  describe('testando a função updateProduct', function () {
+  describe('testando a função deleteProduct', function () {
     beforeEach(() => {
       sinon.stub(productsModel, 'deleteProduct').resolves();
     });
@@ -119,6 +127,8 @@ describe('Testando a camada Service', function () {
     const idNotExists = 99999;
 
     it('testando se retorna o erro "Product not found" por passar um id errado', async function () {
+      sinon.stub(productsModel, 'findById').resolves(undefined)
+
       const result = await productsService.deleteProduct(idNotExists);
 
       expect(result.type).to.deep.equal('PRODUCT_NOT_FOUND');
@@ -126,6 +136,7 @@ describe('Testando a camada Service', function () {
     });
 
     it('testando se de fato deleta o produto', async function () {
+      sinon.stub(productsModel, 'findById').resolves(product)
       const result = await productsService.deleteProduct(extingsProduct);
 
       expect(result.type).to.deep.equal(null);
