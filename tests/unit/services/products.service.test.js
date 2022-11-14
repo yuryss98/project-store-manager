@@ -107,4 +107,29 @@ describe('Testando a camada Service', function () {
       expect(result.message).to.deep.equal('');
     });
   });
+
+  describe('testando a função updateProduct', function () {
+    beforeEach(() => {
+      sinon.stub(productsModel, 'deleteProduct').resolves();
+    });
+
+    afterEach(sinon.restore);
+
+    const extingsProduct = 1;
+    const idNotExists = 99999;
+
+    it('testando se retorna o erro "Product not found" por passar um id errado', async function () {
+      const result = await productsService.deleteProduct(idNotExists);
+
+      expect(result.type).to.deep.equal('PRODUCT_NOT_FOUND');
+      expect(result.message).to.deep.equal('Product not found');
+    });
+
+    it('testando se de fato deleta o produto', async function () {
+      const result = await productsService.deleteProduct(extingsProduct);
+
+      expect(result.type).to.deep.equal(null);
+      expect(result.message).to.deep.equal('');
+    });
+  });
 });

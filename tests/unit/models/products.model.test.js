@@ -45,4 +45,18 @@ describe('Testando a camada Model', function() {
       expect(result).to.deep.equal(1);
     });
   });
+
+  describe('testando a função deleteProduct', function () {
+    afterEach(sinon.restore)
+
+    it('testando se deleta um produto de fato', async function () {
+      sinon.stub(connection, 'execute').resolves();
+
+      const existingProduct = 1;
+
+      const result = await productsModel.deleteProduct(existingProduct);
+
+      expect(result).to.deep.equal(undefined);
+    });
+  });
 });
