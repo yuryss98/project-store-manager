@@ -4,16 +4,16 @@
     "colId": "history",
     "containerId": "",
     "name": "http://localhost:3000/sales",
-    "url": "http://localhost:3000/sales/2323",
-    "method": "GET",
+    "url": "http://localhost:3000/products/1",
+    "method": "PUT",
     "sortNum": 0,
     "created": "2022-11-12T22:16:46.099Z",
-    "modified": "2022-11-14T17:47:19.437Z",
+    "modified": "2022-11-14T18:49:46.596Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "[\n        {\n          \"productId\": 1,\n          \"quantity\": 1\n        },\n        {\n          \"productId\": 2,\n          \"quantity\": 5\n        }\n      ] ",
+      "raw": "{\n  \"name\": \"mao do hulk\"\n}",
       "form": []
     },
     "tests": []

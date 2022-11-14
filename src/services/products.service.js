@@ -1,5 +1,6 @@
 const { productsModel } = require('../models');
 require('express-async-errors');
+const { validateProductExists } = require('./validations/valideteProductExists');
 
 const { validateNewProduct } = require('./validations/validateInputValue');
 
@@ -27,8 +28,22 @@ const createProduct = async (name) => {
   return { type: null, message: productId };
 };
 
+const updateProduct = async (id, name) => {
+  const productIsExists = await validateProductExists([{ productId: id }]);
+  if (productIsExists.type) return productIsExists;
+
+  const { type, message } = validateNewProduct(name);
+
+  if (type) return { type, message };
+
+  const productId = await productsModel.update(id, name);
+
+  return { type: null, message: productId };
+};
+
 module.exports = {
   getProducts,
   getProductById,
   createProduct,
+  updateProduct,
 };
