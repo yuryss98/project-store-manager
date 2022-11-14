@@ -35,13 +35,33 @@ const getSalesById = async (id) => {
 };
 
 const deleteSale = async (id) => {
-  const sales = await salesModel.findById(id);
+  const findSales = await salesModel.findById(id);
 
-  if (!sales.length) return { type: 'SALE_NOT_FOUND', message: 'Sale not found' };
+  if (!findSales.length) return { type: 'SALE_NOT_FOUND', message: 'Sale not found' };
 
   await salesModel.deleteSale(id);
 
   return { type: null, message: '' };
+};
+
+const updateSale = async (id, sales) => {
+  const invalidValues = validateNewSale(sales);
+  if (invalidValues.type) return invalidValues;
+
+  const productIsExists = await validateProductExists(sales);
+  if (productIsExists.type) return productIsExists;
+
+  const findSales = await salesModel.findById(id);
+
+  if (!findSales.length) return { type: 'SALE_NOT_FOUND', message: 'Sale not found' };
+
+  const updatedSales = sales.map(async (element) => {
+    await salesModel.update(id, element);
+  });
+
+  await Promise.all(updatedSales);
+
+  return { type: null, message: { saleId: id, itemsUpdated: sales } };
 };
 
 module.exports = {
@@ -49,4 +69,5 @@ module.exports = {
   getSales,
   getSalesById,
   deleteSale,
+  updateSale,
 };
