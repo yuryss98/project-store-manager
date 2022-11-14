@@ -3,7 +3,7 @@ const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 
 const { salesService } = require('../../../src/services');
-const newProduct = require('../mocks/newSale.mock');
+const { newSale, sales } = require('../mocks/newSale.mock');
 const { salesModel } = require('../../../src/models');
 const valideteProductExists = require('../../../src/services/validations/valideteProductExists');
 
@@ -71,7 +71,39 @@ describe('testes da camanda sale.service', function () {
       );
 
       expect(result.type).to.deep.equal(null);
-      expect(result.message).to.deep.equal(newProduct)
+      expect(result.message).to.deep.equal(newSale)
+    });
+  });
+
+  describe('testando as funções getSales, e getSalesById', function () {
+    afterEach(sinon.restore)
+
+    it('usando getSales, retorna todas as vendas', async function () {
+      sinon.stub(salesModel, 'findAll').resolves(sales);
+
+      const result = await salesService.getSales();
+
+      expect(result.message).to.deep.equal(sales);
+    });
+
+    it(`usando getSalesById, com id correto retorna as vendas
+        e com id errado retorna o erro de Sale not found`, async function () {
+      sinon.stub(salesModel, 'findById')
+        .onFirstCall()
+        .resolves(sales)
+        .onSecondCall()
+        .resolves([])
+
+      const productExists = 1;
+      const productNotExists = 99999;
+
+      let result = await salesService.getSalesById(productExists);
+
+      expect(result.message).to.deep.equal(sales);
+
+      result = await salesService.getSalesById(productNotExists);
+
+      expect(result.message).to.deep.equal('Sale not found');
     });
   });
 });

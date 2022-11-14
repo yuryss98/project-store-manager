@@ -12,4 +12,22 @@ const newSale = {
   ]
 };
 
-module.exports = newSale;
+const sales = [
+  {
+    "saleId": 1,
+    "date": "2022-11-14T17:37:06.000Z",
+    "productId": 1,
+    "quantity": 5
+  },
+  {
+    "saleId": 1,
+    "date": "2022-11-14T17:37:06.000Z",
+    "productId": 2,
+    "quantity": 10
+  }
+];
+
+module.exports = {
+  newSale,
+  sales,
+};
