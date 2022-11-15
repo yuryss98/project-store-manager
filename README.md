@@ -30,7 +30,9 @@ Va para o diretorio do projeto
 Use os comandos:
 
 -- docker-compose up -d (é preciso ter o docker instalado na maquina);
--- docker exec -it store_manager bash (isso te dará acesso ao terminal do container)
+
+-- docker exec -it store_manager bash (isso te dará acesso ao terminal do container);
+
 -- npm install (para instalar as dependencias);
 
 Crie o banco de dados
