@@ -143,4 +143,28 @@ describe('Testando a camada Service', function () {
       expect(result.message).to.deep.equal('');
     });
   });
+
+  describe('testando a função getProductsByName', function () {
+    afterEach(sinon.restore);
+
+    it('testando se retorna apenas 1 produto', async function () {
+      sinon.stub(productsModel, 'findByName').resolves([products[0]])
+
+      const name = '%MAR%';
+
+      const result = await productsService.getProductsByName(name);
+
+      expect(result.type).to.deep.equal(null);
+      expect(result.message).to.deep.equal([products[0]]);
+    });
+
+    it('testando se de retorna todos os produtos quando não passa um nome', async function () {
+      sinon.stub(productsModel, 'findByName').resolves([products])
+
+      const result = await productsService.getProductsByName('');
+
+      expect(result.type).to.deep.equal(null);
+      expect(result.message).to.deep.equal(products);
+    });
+  });
 });

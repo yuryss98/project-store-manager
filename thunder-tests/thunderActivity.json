@@ -4,16 +4,16 @@
     "colId": "history",
     "containerId": "",
     "name": "http://localhost:3000/sales",
-    "url": "http://localhost:3000/products/search?q=",
+    "url": "http://localhost:3000/products/search?q=MAR",
     "method": "GET",
     "sortNum": 0,
     "created": "2022-11-12T22:16:46.099Z",
-    "modified": "2022-11-15T01:05:30.239Z",
+    "modified": "2022-11-15T01:13:40.026Z",
     "headers": [],
     "params": [
       {
         "name": "q",
-        "value": "",
+        "value": "MAR",
         "isPath": false
       }
     ],

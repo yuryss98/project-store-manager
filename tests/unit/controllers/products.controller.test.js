@@ -11,8 +11,8 @@ chai.use(sinonChai);
 
 const { expect } = chai;
 
-describe('Testando a camada Controller', function () {
-  describe('testando as funções getAll e getById', function () {
+describe('Testando a camada Controller', function() {
+  describe('testando as funções getAll e getById', function() {
     afterEach(sinon.restore);
 
     it('usando getAll veja se retorna uma lista completa de produtos', async function () {
@@ -71,7 +71,7 @@ describe('Testando a camada Controller', function () {
     });
   })
 
-  describe('testando a função createProduct', function () {
+  describe('testando a função createProduct', function() {
     afterEach(sinon.restore);
 
     it('usando createProduct passando o campo name com menos de 5 caracter retorna um erro',
@@ -131,7 +131,7 @@ describe('Testando a camada Controller', function () {
       });
   });
 
-  describe('testando a função updateProduct', function () {
+  describe('testando a função updateProduct', function() {
     afterEach(sinon.restore)
 
     it('testando se retorna o erro "Product not found" por passar um id errado', async function () {
@@ -214,7 +214,7 @@ describe('Testando a camada Controller', function () {
     });
   });
 
-  describe('testando a função deleteProduct', function () {
+  describe('testando a função deleteProduct', function() {
     afterEach(sinon.restore)
 
     it('testando se retorna o erro "Product not found" por passar um id errado', async function () {
@@ -259,6 +259,52 @@ describe('Testando a camada Controller', function () {
       await productsController.deleteProduct(req, res);
 
       expect(res.status).to.have.been.calledWith(httpStatusCode.NO_CONTENT);
+    });
+  });
+
+  describe('testando a função getProductsByName', function () {
+    afterEach(sinon.restore);
+
+    it('testando se retorna um produto quando passa a query MAR', async function () {
+      const res = {};
+      const req = {
+        query: {
+          q: 'MAR'
+        },
+      };
+
+      res.status = sinon.stub().returns(res);
+
+      res.json = sinon.stub().returns();
+
+      sinon.stub(productsService, 'getProductsByName')
+        .resolves({ type: null, message: [products[0]] });
+
+      await productsController.getProductsByName(req, res);
+
+      expect(res.status).to.have.been.calledWith(httpStatusCode.OK);
+      expect(res.json).to.have.been.calledWith([products[0]]);
+    });
+
+    it('testando se retorna todos os produtos quando não passaa valor na query', async function () {
+      const res = {};
+      const req = {
+        query: {
+          q: ''
+        },
+      };
+
+      res.status = sinon.stub().returns(res);
+
+      res.json = sinon.stub().returns();
+
+      sinon.stub(productsService, 'getProductsByName')
+        .resolves({ type: null, message: products });
+
+      await productsController.getProductsByName(req, res);
+
+      expect(res.status).to.have.been.calledWith(httpStatusCode.OK);
+      expect(res.json).to.have.been.calledWith(products);
     });
   });
 });

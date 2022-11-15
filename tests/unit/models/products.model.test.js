@@ -59,4 +59,18 @@ describe('Testando a camada Model', function() {
       expect(result).to.deep.equal();
     });
   });
+
+  describe('testando a função findByName', function () {
+    afterEach(sinon.restore)
+
+    it('testando se retorna um produto', async function () {
+      sinon.stub(connection, 'execute').resolves([products[0]]);
+
+      const name = '%MAR%';
+
+      const result = await productsModel.findByName(name);
+
+      expect(result).to.deep.equal(products[0]);
+    });
+  });
 });
