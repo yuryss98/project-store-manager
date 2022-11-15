@@ -262,7 +262,7 @@ describe('Testando a camada Controller', function() {
     });
   });
 
-  describe('testando a função getProductsByName', function () {
+  describe('testando a função getProductsByQuery', function () {
     afterEach(sinon.restore);
 
     it('testando se retorna um produto quando passa a query MAR', async function () {
@@ -277,10 +277,10 @@ describe('Testando a camada Controller', function() {
 
       res.json = sinon.stub().returns();
 
-      sinon.stub(productsService, 'getProductsByName')
+      sinon.stub(productsService, 'getProductsByQuery')
         .resolves({ type: null, message: [products[0]] });
 
-      await productsController.getProductsByName(req, res);
+      await productsController.getProductsByQuery(req, res);
 
       expect(res.status).to.have.been.calledWith(httpStatusCode.OK);
       expect(res.json).to.have.been.calledWith([products[0]]);
@@ -298,10 +298,10 @@ describe('Testando a camada Controller', function() {
 
       res.json = sinon.stub().returns();
 
-      sinon.stub(productsService, 'getProductsByName')
+      sinon.stub(productsService, 'getProductsByQuery')
         .resolves({ type: null, message: products });
 
-      await productsController.getProductsByName(req, res);
+      await productsController.getProductsByQuery(req, res);
 
       expect(res.status).to.have.been.calledWith(httpStatusCode.OK);
       expect(res.json).to.have.been.calledWith(products);

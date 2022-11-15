@@ -3,7 +3,7 @@ const { productsController } = require('../controllers');
 
 router.get('/', productsController.getProducts);
 
-router.get('/search', productsController.getProductsByName);
+router.get('/search', productsController.getProductsByQuery);
 
 router.post('/', productsController.createProduct);
 

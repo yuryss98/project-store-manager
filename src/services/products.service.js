@@ -18,7 +18,7 @@ const getProductById = async (id) => {
   return { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };
 };
 
-const getProductsByName = async (name) => {
+const getProductsByQuery = async (name) => {
   if (name.length) {
     const completeString = `%${name}%`;
 
@@ -27,9 +27,9 @@ const getProductsByName = async (name) => {
     return { type: null, message: product };
   }
 
-  const product = await productsModel.findAll();
+  const products = await productsModel.findAll();
 
-  return { type: null, message: product };
+  return { type: null, message: products };
 };
 
 const createProduct = async (name) => {
@@ -43,12 +43,11 @@ const createProduct = async (name) => {
 };
 
 const updateProduct = async (id, name) => {
-  const productIsExists = await validateProductExists([{ productId: id }]);
-  if (productIsExists.type) return productIsExists;
+  const productNotExists = await validateProductExists([{ productId: id }]);
+  if (productNotExists.type) return productNotExists;
 
-  const { type, message } = validateNewProduct(name);
-
-  if (type) return { type, message };
+  const invalidValues = validateNewProduct(name);
+  if (invalidValues.type) return invalidValues;
 
   await productsModel.update(id, name);
 
@@ -56,8 +55,8 @@ const updateProduct = async (id, name) => {
 };
 
 const deleteProduct = async (id) => {
-  const productIsExists = await validateProductExists([{ productId: id }]);
-  if (productIsExists.type) return productIsExists;
+  const productNotExists = await validateProductExists([{ productId: id }]);
+  if (productNotExists.type) return productNotExists;
 
   await productsModel.deleteProduct(id);
 
@@ -70,5 +69,5 @@ module.exports = {
   createProduct,
   updateProduct,
   deleteProduct,
-  getProductsByName,
+  getProductsByQuery,
 };

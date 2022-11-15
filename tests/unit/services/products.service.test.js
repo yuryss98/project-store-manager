@@ -144,7 +144,7 @@ describe('Testando a camada Service', function () {
     });
   });
 
-  describe('testando a função getProductsByName', function () {
+  describe('testando a função getProductsByQuery', function () {
     afterEach(sinon.restore);
 
     it('testando se retorna apenas 1 produto', async function () {
@@ -152,7 +152,7 @@ describe('Testando a camada Service', function () {
 
       const name = '%MAR%';
 
-      const result = await productsService.getProductsByName(name);
+      const result = await productsService.getProductsByQuery(name);
 
       expect(result.type).to.deep.equal(null);
       expect(result.message).to.deep.equal([products[0]]);
@@ -161,7 +161,7 @@ describe('Testando a camada Service', function () {
     it('testando se de retorna todos os produtos quando não passa um nome', async function () {
       sinon.stub(productsModel, 'findByName').resolves([products])
 
-      const result = await productsService.getProductsByName('');
+      const result = await productsService.getProductsByQuery('');
 
       expect(result.type).to.deep.equal(null);
       expect(result.message).to.deep.equal(products);

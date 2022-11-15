@@ -6,16 +6,16 @@ const createSales = async (sales) => {
   const invalidValues = validateNewSale(sales);
   if (invalidValues.type) return invalidValues;
 
-  const productIsExists = await validateProductExists(sales);
-  if (productIsExists.type) return productIsExists;
+  const productNotExists = await validateProductExists(sales);
+  if (productNotExists.type) return productNotExists;
 
   const dateId = await salesModel.insertSalesDate();
 
-  const salesProduct = sales.map(async (element) => {
-    await salesModel.insertSalesProduct(dateId, element);
+  const insertSalesAndProducts = sales.map(async (sale) => {
+    await salesModel.insertSalesProduct(dateId, sale);
   });
 
-  await Promise.all(salesProduct);
+  await Promise.all(insertSalesAndProducts);
 
   return { type: null, message: { id: dateId, itemsSold: sales } };
 };
@@ -35,9 +35,9 @@ const getSalesById = async (id) => {
 };
 
 const deleteSale = async (id) => {
-  const findSales = await salesModel.findById(id);
+  const findSale = await salesModel.findById(id);
 
-  if (!findSales.length) return { type: 'SALE_NOT_FOUND', message: 'Sale not found' };
+  if (!findSale.length) return { type: 'SALE_NOT_FOUND', message: 'Sale not found' };
 
   await salesModel.deleteSale(id);
 
@@ -48,18 +48,18 @@ const updateSale = async (id, sales) => {
   const invalidValues = validateNewSale(sales);
   if (invalidValues.type) return invalidValues;
 
-  const productIsExists = await validateProductExists(sales);
-  if (productIsExists.type) return productIsExists;
+  const productNotExists = await validateProductExists(sales);
+  if (productNotExists.type) return productNotExists;
 
-  const findSales = await salesModel.findById(id);
+  const findSale = await salesModel.findById(id);
 
-  if (!findSales.length) return { type: 'SALE_NOT_FOUND', message: 'Sale not found' };
+  if (!findSale.length) return { type: 'SALE_NOT_FOUND', message: 'Sale not found' };
 
-  const updatedSales = sales.map(async (element) => {
-    await salesModel.update(id, element);
+  const updatedSale = sales.map(async (sale) => {
+    await salesModel.update(id, sale);
   });
 
-  await Promise.all(updatedSales);
+  await Promise.all(updatedSale);
 
   return { type: null, message: { saleId: id, itemsUpdated: sales } };
 };

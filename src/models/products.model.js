@@ -2,7 +2,7 @@ const connection = require('./connection');
 
 const findAll = async () => {
   const [data] = await connection.execute(
-    'SELECT * FROM products',
+    'SELECT * FROM StoreManager.products',
   );
 
   return data;
@@ -10,7 +10,7 @@ const findAll = async () => {
 
 const findById = async (id) => {
   const [[data]] = await connection.execute(
-    'SELECT * FROM products WHERE id = ?',
+    'SELECT * FROM StoreManager.products WHERE id = ?',
     [id],
   );
 
@@ -19,7 +19,7 @@ const findById = async (id) => {
 
 const insert = async (name) => {
   const [{ insertId }] = await connection.execute(
-    'INSERT INTO products (name) VALUES(?)',
+    'INSERT INTO StoreManager.products (name) VALUES(?)',
     [name],
   );
 
@@ -28,7 +28,7 @@ const insert = async (name) => {
 
 const update = async (id, name) => {
   const [{ affectedRows }] = await connection.execute(
-    `UPDATE products
+    `UPDATE StoreManager.products
       SET name = ?
       WHERE id = ?`,
       [name, id],
@@ -39,7 +39,7 @@ const update = async (id, name) => {
 
 const deleteProduct = async (id) => {
   await connection.execute(
-    `DELETE FROM products
+    `DELETE FROM StoreManager.products
       WHERE id = ?`,
     [id],
   );
@@ -47,7 +47,7 @@ const deleteProduct = async (id) => {
 
 const findByName = async (name) => {
   const [data] = await connection.execute(
-    `SELECT * FROM products
+    `SELECT * FROM StoreManager.products
       WHERE name LIKE ?`,
     [name],
   );
