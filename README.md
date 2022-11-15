@@ -33,7 +33,7 @@ Use os comandos:
 
 -- docker exec -it store_manager bash (isso te dará acesso ao terminal do container);
 
--- npm install (para instalar as dependencias);
+-- npm install (para instalar as dependencias, é preciso ter o node instalado);
 
 Crie o banco de dados
 
