@@ -3,7 +3,7 @@ const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 
 const { salesService } = require('../../../src/services');
-const { sales } = require('../mocks/newSale.mock');
+const { sales, updateSales } = require('../mocks/newSale.mock');
 const { salesModel } = require('../../../src/models');
 const valideteProductExists = require('../../../src/services/validations/valideteProductExists');
 const connection = require('../../../src/models/connection');
@@ -55,5 +55,15 @@ describe('testes da camada sales.model', function () {
     const result = await salesModel.deleteSale(existingProduct);
 
     expect(result).to.deep.equal();
+  });
+
+  it('usando a função update, atualiza uma venda', async function () {
+    sinon.stub(connection, 'execute').resolves([{ affectedRows: 1 }]);
+
+    const saleId = 1;
+
+    const result = await salesModel.update(saleId, updateSales[0]);
+
+    expect(result).to.deep.equal(1);
   });
 });

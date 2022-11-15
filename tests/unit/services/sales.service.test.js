@@ -3,7 +3,13 @@ const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 
 const { salesService } = require('../../../src/services');
-const { newSale, sales, salesWithoutId } = require('../mocks/newSale.mock');
+const {
+  newSale,
+  sales,
+  salesWithoutId,
+  updateSales,
+  updatedSale
+} = require('../mocks/newSale.mock');
 const { salesModel, productsModel } = require('../../../src/models');
 const valideteProductExists = require('../../../src/services/validations/valideteProductExists');
 
@@ -129,6 +135,60 @@ describe('testes da camanda sale.service', function () {
 
       expect(result.type).to.deep.equal(null);
       expect(result.message).to.deep.equal('');
+    });
+  });
+
+  describe('testando a função updateSale', function () {
+    afterEach(sinon.restore);
+
+    const extingsProduct = 1;
+    const idNotExists = 99999;
+
+    it('testando se retorna o erro "Sale not found" por passar um id errado', async function () {
+      sinon.stub(salesModel, 'findById').resolves([]);
+
+      const result = await salesService.updateSale(idNotExists, updateSales);
+
+      expect(result.type).to.deep.equal('SALE_NOT_FOUND');
+      expect(result.message).to.deep.equal('Sale not found');
+    });
+
+    it('testando se retorna o erro de campos invalidos', async function () {
+      let result = await salesService.updateSale(extingsProduct, [{ productId: 1}]);
+
+      expect(result).to.deep.equal(
+        {
+          type: 'BAD_REQUEST',
+          message: '"quantity" is required'
+        }
+      );
+
+      result = await salesService.updateSale(extingsProduct, [{ quantity: 1 }]);
+
+      expect(result).to.deep.equal(
+        {
+          type: 'BAD_REQUEST',
+          message: '"productId" is required'
+        }
+      );
+    });
+
+    it('testando se retorna o erro de "Product not found"', async function () {
+      sinon.stub(productsModel, 'findById').resolves(undefined)
+
+      const result = await salesService.updateSale(idNotExists, updateSales);
+
+      expect(result.type).to.deep.equal('PRODUCT_NOT_FOUND');
+      expect(result.message).to.deep.equal('Product not found');
+    });
+
+    it('testando se de fato atualiza a venda', async function () {
+      sinon.stub(salesModel, 'update').resolves([{ affectedRows: 1 }]);
+
+      const result = await salesService.updateSale(extingsProduct, updateSales);
+
+      expect(result.type).to.deep.equal(null);
+      expect(result.message).to.deep.equal(updatedSale);
     });
   });
 });
