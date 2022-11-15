@@ -18,6 +18,20 @@ const getProductById = async (id) => {
   return { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };
 };
 
+const getProductsByName = async (name) => {
+  if (name.length) {
+    const completeString = `%${name}%`;
+
+    const product = await productsModel.findByName(completeString);
+
+    return { type: null, message: product };
+  }
+
+  const product = await productsModel.findAll();
+
+  return { type: null, message: product };
+};
+
 const createProduct = async (name) => {
   const { type, message } = validateNewProduct(name);
 
@@ -56,4 +70,5 @@ module.exports = {
   createProduct,
   updateProduct,
   deleteProduct,
+  getProductsByName,
 };
