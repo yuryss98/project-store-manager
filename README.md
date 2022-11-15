@@ -31,7 +31,11 @@ Use os comandos:
 
 -- docker-compose up -d (é preciso ter o docker instalado na maquina);
 -- docker exec -it store_manager bash (isso te dará acesso ao terminal do container)
--- depois use o npm install (para instalar as dependencias);
+-- npm install (para instalar as dependencias);
+
+Crie o banco de dados
+
+-- as query para criar o banco de dados e popular ele estão presentes nos arquivos migration.sql e seed.sql respectivamente;
 
 Inicie a aplicação com:
 
